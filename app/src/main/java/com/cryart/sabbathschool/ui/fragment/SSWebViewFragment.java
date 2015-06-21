@@ -33,6 +33,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,9 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.amazonaws.mobileconnectors.cognito.Dataset;
+import com.amazonaws.mobileconnectors.cognito.DefaultSyncCallback;
+import com.amazonaws.mobileconnectors.cognito.Record;
 import com.cryart.sabbathschool.R;
 import com.cryart.sabbathschool.model.SSDay;
 import com.cryart.sabbathschool.ui.activity.SSBibleVerseActivity;
@@ -49,9 +53,12 @@ import com.cryart.sabbathschool.ui.activity.SSMainActivity;
 import com.cryart.sabbathschool.ui.widget.SSWebView;
 import com.cryart.sabbathschool.util.SSConstants;
 import com.cryart.sabbathschool.util.SSCore;
+import com.cryart.sabbathschool.util.SSData;
 import com.cryart.sabbathschool.util.SSHelper;
 import com.cryart.sabbathschool.util.SSTracker;
 import com.flaviofaria.kenburnsview.KenBurnsView;
+
+import java.util.List;
 
 public class SSWebViewFragment extends Fragment {
     private SharedPreferences _SSPreferences;
@@ -59,6 +66,7 @@ public class SSWebViewFragment extends Fragment {
     private String _SSDayDate;
     private SSDay _SSDay;
     private SSCore _SSCore;
+    private SSData _SSData;
 
     private KenBurnsView _SSHero;
     private ProgressBar _SSWebViewLoading;
@@ -102,6 +110,7 @@ public class SSWebViewFragment extends Fragment {
         super.onCreate(savedInstanceState);
         _SSDayDate = getArguments().getString(SSConstants.SS_DAY_DATE_ARG);
         _SSCore = SSCore.getInstance(getActivity());
+        _SSData = SSData.getInstance(getActivity());
     }
 
     @Override
@@ -137,9 +146,28 @@ public class SSWebViewFragment extends Fragment {
             public void onPageFinished(WebView view, String url) {
                 _SSWebViewLoading.setVisibility(View.INVISIBLE);
                 view.setVisibility(View.VISIBLE);
+                final WebView webView = view;
+                final String _SSDayDateFinal = _SSDayDate;
+                Log.v("Z", _SSDayDate);
 
-                setHighlights(_SSDay._day_highlights);
-                setComments(_SSDay._day_comments);
+                Dataset _SSDataset = _SSData._SSCognitoClient.openOrCreateDataset(_SSDayDate + "_" + SSCore.LANGUAGE);
+                setComments(_SSDataset.get(SSConstants.SS_DATASET_COMMENTS_KEY));
+                setHighlights(_SSDataset.get(SSConstants.SS_DATASET_HIGHLIGHTS_KEY));
+
+                _SSDataset.synchronizeOnConnectivity(new DefaultSyncCallback() {
+                    @Override
+                    public void onSuccess(final Dataset dataset, List<Record> updatedRecords) {
+                        webView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Dataset _SSDataset = _SSData._SSCognitoClient.openOrCreateDataset(_SSDayDate + "_" + SSCore.LANGUAGE);
+
+                                webView.loadUrl(String.format("javascript:ss.setComments('%s');", _SSDataset.get(SSConstants.SS_DATASET_COMMENTS_KEY)));
+                                webView.loadUrl(String.format("javascript:ss.setHighlight('%s');", _SSDataset.get(SSConstants.SS_DATASET_HIGHLIGHTS_KEY)));
+                            }
+                        });
+                    }
+                });
             }
         });
 
@@ -171,7 +199,7 @@ public class SSWebViewFragment extends Fragment {
         public void saveHighlights(String highlights){
             try {
                 SSTracker.sendSelectionHighlightEvent(getActivity());
-                _SSCore.ssSaveHighlights(_SSDay._serial, highlights);
+                _SSData.saveHighlights(_SSDayDate, highlights);
             } catch (Exception e){}
         }
 
@@ -179,7 +207,8 @@ public class SSWebViewFragment extends Fragment {
         public void saveComments(String comments){
             try {
                 SSTracker.sendCommentSaveEvent(getActivity());
-                _SSCore.ssSaveComments(_SSDay._serial, comments);
+
+                _SSData.saveComments(_SSDayDate, comments);
             } catch (Exception e){}
         }
 

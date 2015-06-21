@@ -60,7 +60,7 @@ public class SSCore extends SQLiteOpenHelper {
 
     private static SSCore ssInstance = null;
     private static String ssTodayDate = null;
-    private static String LANGUAGE;
+    public static String LANGUAGE;
     private static Context context;
 
     public SSCore(Context context) {

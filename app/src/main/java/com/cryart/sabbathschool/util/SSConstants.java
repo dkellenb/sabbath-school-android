@@ -72,4 +72,8 @@ public class SSConstants {
     public static final String SS_NOTIFICATION_LESSON_HERO_TMP_FILENAME = "share_lesson.png";
 
     public static final String SS_SHARE_FB_LINK = "https://www.facebook.com/shabbatschool";
+
+
+    public static final String SS_DATASET_HIGHLIGHTS_KEY = "highlights";
+    public static final String SS_DATASET_COMMENTS_KEY = "comments";
 }
