@@ -64,6 +64,14 @@
             android:dependency="ss_settings_notification_enabled"
             android:defaultValue="08:00" />
 
+        <com.cryart.sabbathschool.util.SSSignOutDialogPreference
+            android:key="ss_settings_sign_out"
+            android:title="Sign out"
+            android:summary="Sign out from your current account."
+            android:dialogMessage="Are you sure you want to sign out?"
+            android:positiveButtonText="Yes, sign me out"
+            android:negativeButtonText="No, keep me in" />
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/ss_settings_about">
