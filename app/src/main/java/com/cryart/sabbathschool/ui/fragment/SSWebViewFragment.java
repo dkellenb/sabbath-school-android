@@ -33,7 +33,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,6 +86,34 @@ public class SSWebViewFragment extends Fragment {
         _SSDay = _SSCore.ssGetDay(_SSDayDate);
         _SSHero.setImageBitmap(SSHelper.getBitmapFromBase64(_SSDay._lesson_image));
         ((SSMainActivity)getActivity()).setHeroView();
+
+        final String _SSDayDateFinal = _SSDayDate;
+
+        _SSWebView.setWebViewClient(new WebViewClient() {
+            public void onPageFinished(WebView view, String url) {
+                _SSWebViewLoading.setVisibility(View.INVISIBLE);
+                view.setVisibility(View.VISIBLE);
+                final WebView webView = view;
+
+                Dataset _SSDataset = _SSData._SSCognitoClient.openOrCreateDataset("2015");
+                setComments(_SSDataset.get(_SSDayDateFinal + "_" + SSCore.LANGUAGE + "_" + SSConstants.SS_DATASET_COMMENTS_KEY));
+                setHighlights(_SSDataset.get(_SSDayDateFinal + "_" + SSCore.LANGUAGE + "_" + SSConstants.SS_DATASET_HIGHLIGHTS_KEY));
+
+                _SSDataset.synchronizeOnConnectivity(new DefaultSyncCallback() {
+                    @Override
+                    public void onSuccess(final Dataset dataset, List<Record> updatedRecords) {
+                        webView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Dataset _SSDataset = _SSData._SSCognitoClient.openOrCreateDataset("2015");
+                                webView.loadUrl(String.format("javascript:ss.setComments('%s');", _SSDataset.get(_SSDayDateFinal + "_" + SSCore.LANGUAGE + "_" + SSConstants.SS_DATASET_COMMENTS_KEY)));
+                                webView.loadUrl(String.format("javascript:ss.setHighlight('%s');", _SSDataset.get(_SSDayDateFinal + "_" + SSCore.LANGUAGE + "_" + SSConstants.SS_DATASET_HIGHLIGHTS_KEY)));
+                            }
+                        });
+                    }
+                });
+            }
+        });
 
         _SSWebView.loadDataWithBaseURL(SSConstants.SS_WEBAPP_PATH_PREFIX,
                 SSHelper.readFileFromAssets(getActivity(), SSConstants.SS_WEBAPP_MAIN)
@@ -142,34 +169,6 @@ public class SSWebViewFragment extends Fragment {
 
         _SSWebView.addJavascriptInterface(new SSWebInterface(getActivity()), "SSBridge");
         _SSWebView.getSettings().setJavaScriptEnabled(true);
-        _SSWebView.setWebViewClient(new WebViewClient() {
-            public void onPageFinished(WebView view, String url) {
-                _SSWebViewLoading.setVisibility(View.INVISIBLE);
-                view.setVisibility(View.VISIBLE);
-                final WebView webView = view;
-                final String _SSDayDateFinal = _SSDayDate;
-                Log.v("Z", _SSDayDate);
-
-                Dataset _SSDataset = _SSData._SSCognitoClient.openOrCreateDataset(_SSDayDate + "_" + SSCore.LANGUAGE);
-                setComments(_SSDataset.get(SSConstants.SS_DATASET_COMMENTS_KEY));
-                setHighlights(_SSDataset.get(SSConstants.SS_DATASET_HIGHLIGHTS_KEY));
-
-                _SSDataset.synchronizeOnConnectivity(new DefaultSyncCallback() {
-                    @Override
-                    public void onSuccess(final Dataset dataset, List<Record> updatedRecords) {
-                        webView.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                Dataset _SSDataset = _SSData._SSCognitoClient.openOrCreateDataset(_SSDayDate + "_" + SSCore.LANGUAGE);
-
-                                webView.loadUrl(String.format("javascript:ss.setComments('%s');", _SSDataset.get(SSConstants.SS_DATASET_COMMENTS_KEY)));
-                                webView.loadUrl(String.format("javascript:ss.setHighlight('%s');", _SSDataset.get(SSConstants.SS_DATASET_HIGHLIGHTS_KEY)));
-                            }
-                        });
-                    }
-                });
-            }
-        });
 
         this.loadDay(_SSDayDate);
 
@@ -199,7 +198,7 @@ public class SSWebViewFragment extends Fragment {
         public void saveHighlights(String highlights){
             try {
                 SSTracker.sendSelectionHighlightEvent(getActivity());
-                _SSData.saveHighlights(_SSDayDate, highlights);
+                _SSData.saveHighlights("2015", _SSDayDate, highlights);
             } catch (Exception e){}
         }
 
@@ -208,7 +207,7 @@ public class SSWebViewFragment extends Fragment {
             try {
                 SSTracker.sendCommentSaveEvent(getActivity());
 
-                _SSData.saveComments(_SSDayDate, comments);
+                _SSData.saveComments("2015", _SSDayDate, comments);
             } catch (Exception e){}
         }
 
