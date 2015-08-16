@@ -59,11 +59,11 @@ public class SSData {
         });
     }
 
-    public void saveComments(String _SSDayDate, String comments) {
-        this.saveData(_SSDayDate + "_" + SSCore.LANGUAGE, SSConstants.SS_DATASET_COMMENTS_KEY, comments);
+    public void saveComments(String _SSYear, String _SSDayDate, String comments) {
+        this.saveData(_SSYear, _SSDayDate + "_" + SSCore.LANGUAGE + "_" + SSConstants.SS_DATASET_COMMENTS_KEY, comments);
     }
 
-    public void saveHighlights(String _SSDayDate, String highlights) {
-        this.saveData(_SSDayDate + "_" + SSCore.LANGUAGE, SSConstants.SS_DATASET_HIGHLIGHTS_KEY, highlights);
+    public void saveHighlights(String _SSYear, String _SSDayDate, String highlights) {
+        this.saveData(_SSYear, _SSDayDate + "_" + SSCore.LANGUAGE + "_" + SSConstants.SS_DATASET_HIGHLIGHTS_KEY, highlights);
     }
 }
