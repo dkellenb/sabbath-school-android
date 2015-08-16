@@ -28,9 +28,17 @@ import android.content.IntentSender;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 import com.cryart.sabbathschool.R;
 import com.cryart.sabbathschool.util.SSAccounts;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
@@ -46,6 +54,8 @@ public class SSAccountsActivity extends Activity implements View.OnClickListener
     private static final int RC_SIGN_IN = 0;
     private GoogleApiClient SSGoogleApiClient;
     private SSAccounts _SSAccounts;
+    private CallbackManager _SSCallbackManager;
+
 
     @Override
     public void onBackPressed() {
@@ -63,6 +73,14 @@ public class SSAccountsActivity extends Activity implements View.OnClickListener
 
         setContentView(R.layout.ss_accounts_activity);
 
+        Button guestSignIn = (Button) findViewById(R.id.ss_accounts_guest_sign_in);
+        guestSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToLoadingActivity();
+            }
+        });
+
         if (_SSAccounts._SSCognitoCredentialsProvider.getCachedIdentityId() != null){
             this.navigateToLoadingActivity();
         }
@@ -76,6 +94,43 @@ public class SSAccountsActivity extends Activity implements View.OnClickListener
                 .addApi(Plus.API)
                 .addScope(Plus.SCOPE_PLUS_LOGIN)
                 .build();
+
+
+        _SSCallbackManager = CallbackManager.Factory.create();
+        LoginButton loginButton = (LoginButton) findViewById(R.id.ss_accounts_facebook_sign_in);
+
+        loginButton.registerCallback(_SSCallbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        Map<String, String> logins = new HashMap<String, String>();
+                        logins.put("graph.facebook.com", AccessToken.getCurrentAccessToken().getToken());
+                        _SSAccounts._SSCognitoCredentialsProvider.setLogins(logins);
+                        navigateToLoadingActivity();
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        // App code
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        // App code
+                    }
+                });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AppEventsLogger.activateApp(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AppEventsLogger.deactivateApp(this);
     }
 
     @Override
@@ -88,6 +143,7 @@ public class SSAccountsActivity extends Activity implements View.OnClickListener
 
     @Override
     protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
+
         if (requestCode == RC_SIGN_IN) {
             if (responseCode != RESULT_OK) {
                 SSGoogleSignInClicked = false;
@@ -98,6 +154,8 @@ public class SSAccountsActivity extends Activity implements View.OnClickListener
             if (!SSGoogleApiClient.isConnecting()) {
                 SSGoogleApiClient.connect();
             }
+        } else {
+            _SSCallbackManager.onActivityResult(requestCode, responseCode, intent);
         }
     }
 
@@ -152,7 +210,6 @@ public class SSAccountsActivity extends Activity implements View.OnClickListener
                 Map<String, String> logins = new HashMap<String, String>();
                 logins.put("accounts.google.com", token);
                 _SSAccounts._SSCognitoCredentialsProvider.setLogins(logins);
-//                SSCognitoProvider.withLogins(logins);
                 _SSAccountsActivity.navigateToLoadingActivity();
             }
         }

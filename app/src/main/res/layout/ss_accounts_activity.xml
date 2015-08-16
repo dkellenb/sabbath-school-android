@@ -21,14 +21,58 @@
   ~ THE SOFTWARE.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.gms.common.SignInButton
+    <com.flaviofaria.kenburnsview.KenBurnsView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/ss_accounts_background" />
 
+
+
+    <com.google.android.gms.common.SignInButton
         android:id="@+id/ss_accounts_google_sign_in"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="195dp"
+        android:layout_alignRight="@+id/ss_accounts_facebook_sign_in"
+        android:layout_alignEnd="@+id/ss_accounts_facebook_sign_in"
+        android:layout_alignLeft="@+id/ss_accounts_facebook_sign_in"
+        android:layout_alignStart="@+id/ss_accounts_facebook_sign_in" />
 
-</LinearLayout>
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/ss_accounts_facebook_sign_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/ss_app_name"
+        android:id="@+id/textView"
+        android:layout_marginTop="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textAllCaps="true"
+        android:clickable="false" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="USE AS GUEST"
+        android:id="@+id/ss_accounts_guest_sign_in"
+        android:layout_alignTop="@+id/ss_accounts_google_sign_in"
+        android:layout_alignLeft="@+id/ss_accounts_google_sign_in"
+        android:layout_alignStart="@+id/ss_accounts_google_sign_in"
+        android:layout_marginTop="96dp"
+        android:layout_alignRight="@+id/ss_accounts_google_sign_in"
+        android:layout_alignEnd="@+id/ss_accounts_google_sign_in" />
+
+</RelativeLayout>

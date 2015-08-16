@@ -25,6 +25,7 @@ package com.cryart.sabbathschool;
 import android.app.Application;
 import android.content.Context;
 
+import com.facebook.FacebookSdk;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 
@@ -43,6 +44,7 @@ public class SSApplication extends Application {
     public void onCreate() {
         super.onCreate();
         getTracker();
+        FacebookSdk.sdkInitialize(getApplicationContext());
     }
 
     public synchronized Tracker getTracker() {
