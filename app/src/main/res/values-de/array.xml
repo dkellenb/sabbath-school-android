@@ -41,9 +41,9 @@
         <item>Französisch</item>
         <item>Portugiesisch</item>
         <item>Russisch</item>
-        <item>Ukrainian</item>
+        <item>Ukrainisch</item>
         <item>Spanisch</item>
-        <item>Deutschen</item>
+        <item>Deutsch</item>
     </string-array>
 
     <string-array name="ss_settings_lesson_language_values">

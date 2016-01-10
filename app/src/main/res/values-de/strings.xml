@@ -22,16 +22,16 @@
 
 <resources>
     <string name="ss_app_name">Sabbatschule</string>
-    <string name="ss_loading">Wird geladen ...</string>
-    <string name="ss_downloading">Herunterladen von aktuellen Quartals</string>
+    <string name="ss_loading">Lade</string>
+    <string name="ss_downloading">Das aktuelle Quartal wird heruntergeladen</string>
     <string name="ss_downloading_error">Fehler beim Herunterladen</string>
-    <string name="ss_retry">wiederholen</string>
+    <string name="ss_retry">Wiederholen</string>
 
-    <string name="ss_notification_read_lesson">Lesen Lektion</string>
-    <string name="ss_notification_share_lesson">Teilen Lektion</string>
+    <string name="ss_notification_read_lesson">Lektion lesen</string>
+    <string name="ss_notification_share_lesson">Lektion teilen</string>
 
     <string name="ss_navigation_menu_open">Menü öffnen</string>
-    <string name="ss_navigation_menu_close">Close Menu</string>
+    <string name="ss_navigation_menu_close">Menü schliessen</string>
 
     <string name="ss_menu_lesson">Lektion</string>
 
@@ -54,26 +54,26 @@
     <string name="ss_menu_misc_about_icon">&#xe0bf;</string>
     <string name="ss_menu_misc_about_title">Über</string>
 
-    <string name="ss_webview_menu_highlight">Höhepunkt</string>
+    <string name="ss_webview_menu_highlight">Hervorheben</string>
     <string name="ss_webview_menu_search">Suche</string>
     <string name="ss_webview_menu_copy">Kopieren</string>
     <string name="ss_webview_menu_copied">Kopiert</string>
     <string name="ss_webview_menu_share">Teilen</string>
-    <string name="ss_webview_menu_share_text_to">Teilen Auswahl zu</string>
-    <string name="ss_webview_menu_remove_highlight">Entfernen Highlight</string>
+    <string name="ss_webview_menu_share_text_to">Auswahl teilen mit</string>
+    <string name="ss_webview_menu_remove_highlight">Hervorhebung entfernen</string>
 
     <string name="ss_bible_verse_activity_title">Bibel-Vers-</string>
 
     <string name="ss_setings">Einstellungen</string>
-    <string name="ss_settings_general">Allgemeine</string>
+    <string name="ss_settings_general">Allgemein</string>
     <string name="ss_settings_text_size">Textgröße</string>
     <string name="ss_settings_ken_burns">Ken Burns Effekt</string>
-    <string name="ss_settings_ken_burns_summary">Schwimmende Ausgewähltes Bild auf dem Hauptbildschirm</string>
-    <string name="ss_settings_lesson_language">Langauge der Lektion</string>
-    <string name="ss_settings_reading_mode">Modus des Lesens</string>
+    <string name="ss_settings_ken_burns_summary">Ausgewähltes Bild auf dem Hauptbildschirm darstellen</string>
+    <string name="ss_settings_lesson_language">Sprache der Lektion</string>
+    <string name="ss_settings_reading_mode">Lese Modus</string>
     <string name="ss_settings_notification_enabled">Tägliche Benachrichtigung</string>
-    <string name="ss_settings_notification_enabled_summary">Überprüfen Sie die tägliche Benachrichtigung über Sabbatschulstunde zu ermöglichen</string>
-    <string name="ss_settings_notification_time">Zeitpunkt der Anmeldung</string>
+    <string name="ss_settings_notification_enabled_summary">Selektieren um täglich über die Sabbatschullektion benachrichtigt zu werden</string>
+    <string name="ss_settings_notification_time">Zeitpunkt der Benachrichtigung</string>
 
     <string name="ss_settings_about">Über</string>
     <string name="ss_settings_open_source_title">Open Source Lizenzen</string>
@@ -99,9 +99,9 @@
     <string name="ss_about_menu_photo_credits_icon">&#xf16d;</string>
     <string name="ss_about_menu_photo_credits_title">Bildnachweis \@asimsness</string>
 
-    <string name="rate_dialog_title">Bewerten Sabbatschule</string>
-    <string name="rate_dialog_message">Wenn Sie Sabbatschule mögen, würden Sie sich kümmern, einen Moment Zeit, um es zu bewerten? Danke für Ihre Unterstützung!</string>
-    <string name="rate_dialog_ok">Bewerte Es</string>
+    <string name="rate_dialog_title">Sabbatschule-App bewerten</string>
+    <string name="rate_dialog_message">Wenn Sie Sabbatschule-App mögen, wären Sie bereit einen Moment Zeit zu nehmen um die App zu bewerten? Danke für Ihre Unterstützung!</string>
+    <string name="rate_dialog_ok">Bewerten</string>
     <string name="rate_dialog_cancel">Später</string>
     <string name="rate_dialog_no">Nein</string>
 </resources>
